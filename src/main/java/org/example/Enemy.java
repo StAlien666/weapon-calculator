@@ -1,27 +1,33 @@
 package org.example;
 
-public class Enemy {
+public class Enemy implements EnemyProperties, EnemyState {
     private double hp;
-    private double resist;
+    private double resistance;
 
-    public Enemy(double hp, double resist) {
+    public Enemy(double hp, double resistance) {
         this.hp = hp;
-        this.resist = resist;
+        this.resistance = resistance;
     }
 
+    //EnemyProperties
+    @Override
     public double getHp() {
         return hp;
     }
 
+    @Override
+    public double getResistance() {
+        return resistance;
+    }
+
+    //EnemyState
+    @Override
     public void setHp(double hp) {
         this.hp = hp;
     }
 
-    public double getResist() {
-        return resist;
-    }
-
-    public void setResist(double resist) {
-        this.resist = resist;
+    @Override
+    public void setResistance(double resistance) {
+        this.resistance = resistance;
     }
 }
