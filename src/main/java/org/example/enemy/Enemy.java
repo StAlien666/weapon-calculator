@@ -1,4 +1,4 @@
-package org.example;
+package org.example.enemy;
 
 public class Enemy implements EnemyProperties, EnemyState {
     private double hp;

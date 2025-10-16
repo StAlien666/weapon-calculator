@@ -1,4 +1,4 @@
-package org.example;
+package org.example.weapon;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;

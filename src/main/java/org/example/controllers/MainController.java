@@ -1,13 +1,11 @@
-package org.example;
+package org.example.controllers;
 
 
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.example.weapon.Weapon;
+import org.example.weapon.WeaponRepository;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
-import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController

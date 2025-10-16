@@ -1,7 +1,6 @@
-package org.example;
+package org.example.enemy;
 
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
 
 public class EnemyDTO {
 

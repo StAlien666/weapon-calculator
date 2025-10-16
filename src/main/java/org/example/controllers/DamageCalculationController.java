@@ -1,6 +1,9 @@
-package org.example;
+package org.example.controllers;
 
 import jakarta.validation.Valid;
+import org.example.calculations.CalculationRequestDTO;
+import org.example.calculations.CalculationResult;
+import org.example.calculations.DamageCalculationService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

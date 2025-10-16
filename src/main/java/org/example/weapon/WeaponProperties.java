@@ -1,4 +1,4 @@
-package org.example;
+package org.example.weapon;
 
 public interface WeaponProperties {
     String getName();

@@ -1,4 +1,7 @@
-package org.example;
+package org.example.calculations;
+
+import org.example.enemy.EnemyDTO;
+import org.example.weapon.WeaponDTO;
 
 public class CalculationRequestDTO {
     private WeaponDTO weapon;

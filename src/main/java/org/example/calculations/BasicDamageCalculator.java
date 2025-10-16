@@ -1,6 +1,9 @@
-package org.example;
+package org.example.calculations;
 
 
+import org.example.enemy.EnemyProperties;
+import org.example.weapon.DamageCalculator;
+import org.example.weapon.WeaponProperties;
 import org.springframework.stereotype.Service;
 
 @Service

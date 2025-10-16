@@ -1,5 +1,10 @@
-package org.example;
+package org.example.calculations;
 
+import org.example.enemy.EnemyDTO;
+import org.example.enemy.EnemyProperties;
+import org.example.weapon.DamageCalculator;
+import org.example.weapon.WeaponDTO;
+import org.example.weapon.WeaponProperties;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -12,7 +17,6 @@ public class DamageCalculationService {
     }
 
     private WeaponProperties toWeaponProperties(WeaponDTO dto) {
-        // Используем анонимный класс для адаптации DTO к интерфейсу
         return new WeaponProperties() {
             @Override
             public String getName() {
@@ -30,8 +34,6 @@ public class DamageCalculationService {
             }
         };
     }
-
-    // Вспомогательный метод для преобразования EnemyDTO -> EnemyProperties
     private EnemyProperties toEnemyProperties(EnemyDTO dto) {
         return new EnemyProperties() {
             @Override

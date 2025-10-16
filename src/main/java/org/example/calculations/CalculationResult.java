@@ -1,4 +1,4 @@
-package org.example;
+package org.example.calculations;
 
 public class CalculationResult {
     private double damage;
@@ -11,7 +11,7 @@ public class CalculationResult {
         this.ttk = ttk;
     }
 
-    // Геттеры
+    // геттеры
     public double getDamage() { return damage; }
     public double getDps() { return dps; }
     public double getTtk() { return ttk; }

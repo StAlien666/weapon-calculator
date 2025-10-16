@@ -1,4 +1,6 @@
-package org.example;
+package org.example.weapon;
+
+import org.example.enemy.EnemyProperties;
 
 public interface DamageCalculator {
     double calculateDamage(WeaponProperties weapon, EnemyProperties enemy);

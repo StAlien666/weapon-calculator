@@ -1,4 +1,4 @@
-package org.example;
+package org.example.enemy;
 
 public interface EnemyState {
     void setHp(double hp);
