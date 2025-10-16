@@ -1,9 +1,20 @@
 package org.example;
 
-public class Weapon implements WeaponProperties, WeaponCalculator {
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
+@Entity
+public class Weapon implements WeaponProperties {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private String name;
     private double damage;
     private double attackPerSecond;
+
+    public Weapon(){}
 
     public Weapon(String name, double damage, double attackPerSecond) {
         this.name = name;
@@ -27,22 +38,6 @@ public class Weapon implements WeaponProperties, WeaponCalculator {
         return attackPerSecond;
     }
 
-    //WeaponCalculator
-    @Override
-    public double calculateDPS() {
-        return damage * attackPerSecond;
-    }
-
-    @Override
-    public double calculateShotsToKill(double enemyHp) {
-        return enemyHp / damage;
-    }
-
-    @Override
-    public double calculateTTK(double enemyHp) {
-        return calculateShotsToKill(enemyHp) / attackPerSecond;
-    }
-
     // то для чего не нужны интерфейсы
     public void setName(String name) {
         this.name = name;
@@ -55,4 +50,9 @@ public class Weapon implements WeaponProperties, WeaponCalculator {
     public void setAttackPerSecond(double attackPerSecond) {
         this.attackPerSecond = attackPerSecond;
     }
+
+    public Long getId() {
+        return id;
+    }
+
 }

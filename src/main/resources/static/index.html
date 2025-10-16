@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Weapon Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            display: flex;
+            gap: 40px;
+        }
+        .panel {
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 20px;
+            min-width: 300px;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        input {
+            padding: 6px;
+            border: 1px solid #999;
+            border-radius: 4px;
+        }
+        button {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 4px;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+        }
+        button.delete {
+            background-color: #dc3545;
+            padding: 2px 6px;
+            font-size: 12px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+        th {
+            background-color: #f1f1f1;
+        }
+    </style>
+</head>
+<body style="background: linear-gradient(135deg, #2c3e50 0%, #1a2530 100%); min-height: 100vh;">
+
+<div class="container">
+    <div class="panel">
+        <h2>Добавить оружие</h2>
+        <form id="addWeaponForm">
+            <input type="text" id="name" placeholder="Название оружия" required>
+            <input type="number" step="0.1" id="damage" placeholder="Урон" required>
+            <input type="number" step="0.1" id="attackPerSecond" placeholder="Атак в секунду" required>
+            <button type="submit">Добавить</button>
+        </form>
+    </div>
+
+    <div class="panel">
+        <h2>Параметры врага</h2>
+        <form id="enemyData">
+            <input type="number" step="1" id="enemyHp" placeholder="Здоровье (HP)" required>
+            <input type="number" step="0.1" id="enemyRes" placeholder="Сопротивление (%)" required>
+            <button type="submit">Применить</button>
+        </form>
+        <p id="enemyInfo">Враг: не задан</p>
+    </div>
+</div>
+
+<div class="panel" style="margin-top: 20px;">
+    <h2>Оружие</h2>
+    <table id="weaponTable">
+        <thead>
+
+        <tr>
+            <th>Название</th>
+            <th>Урон</th>
+            <th>APS</th>
+            <th>DPS</th>
+            <th>Выстрелов до убийства</th>
+            <th>TTK (сек)</th>
+            <th></th>
+        </tr>
+
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+
+<script>
+    const weaponTableBody = document.querySelector("#weaponTable tbody");
+    const enemyInfo = document.getElementById("enemyInfo");
+
+    let enemyHp = null;
+    let enemyRes = null;
+    let weapons = [];
+
+    async function loadWeapons() {
+        try {
+            const res = await fetch("/api/weapons");
+            weapons = await res.json();
+            renderTable();
+        } catch (error) {
+            console.error("Ошибка загрузки оружия:", error);
+        }
+    }
+
+    function renderTable() {
+        weaponTableBody.innerHTML = "";
+        weapons.forEach(w => {
+            const dps = w.damage * w.attackPerSecond;
+            let shotsToKill = '-';
+            let ttk = '-';
+
+            if (enemyHp !== null && enemyRes !== null) {
+                const effectiveDamage = w.damage * (1 - enemyRes / 100);
+                shotsToKill = (enemyHp / effectiveDamage).toFixed(2);
+                ttk = (parseFloat(shotsToKill) / w.attackPerSecond).toFixed(2);
+            }
+
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+                <td>${w.name}</td>
+                <td>${w.damage}</td>
+                <td>${w.attackPerSecond}</td>
+                <td>${dps.toFixed(1)}</td>
+                <td>${shotsToKill}</td>
+                <td>${ttk}</td>
+                <td><button class="delete" onclick="deleteWeapon(${w.id})">X</button></td>
+            `;
+            weaponTableBody.appendChild(tr);
+        });
+    }
+
+    async function deleteWeapon(id) {
+        try {
+            await fetch(`/api/weapons/${id}`, { method: "DELETE" });
+            loadWeapons();
+        } catch (error) {
+            console.error("Ошибка удаления:", error);
+        }
+    }
+
+    document.getElementById("addWeaponForm").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const weapon = {
+            name: document.getElementById("name").value,
+            damage: parseFloat(document.getElementById("damage").value),
+            attackPerSecond: parseFloat(document.getElementById("attackPerSecond").value)
+        };
+        try {
+            await fetch("/api/weapons", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(weapon)
+            });
+            e.target.reset();
+            loadWeapons();
+        } catch (error) {
+            console.error("Ошибка добавления:", error);
+        }
+    });
+
+    document.getElementById("enemyData").addEventListener("submit", (e) => {
+        e.preventDefault();
+        enemyHp = parseFloat(document.getElementById("enemyHp").value);
+        enemyRes = parseFloat(document.getElementById("enemyRes").value);
+        enemyInfo.textContent = `Враг: HP = ${enemyHp}, Сопротивление = ${enemyRes}%`;
+        renderTable();
+    });
+
+    loadWeapons();
+</script>
+
+</body>
+</html>

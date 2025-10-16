@@ -1,5 +1,9 @@
 package org.example;
 
+
+import org.springframework.stereotype.Service;
+
+@Service
 public class BasicDamageCalculator implements DamageCalculator {
     @Override
     public double calculateDamage(WeaponProperties weapon, EnemyProperties enemy) {
